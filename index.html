@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lost Leaves Dialogue Maker Pro</title>
+<style>
+    :root {
+        --dark-blue: #001f3f;
+        --mid-blue: #0072ff;
+        --light-blue: #00d4ff;
+        --bg-color: #0b0e14;
+        --panel-color: #161b22;
+        --input-bg: #0d1117;
+    }
+
+    body {
+        background: var(--bg-color);
+        color: #e6edf3;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+        margin: 0;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 700px;
+        background: var(--panel-color);
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+        border: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    h1 { 
+        background: linear-gradient(to right, var(--light-blue), var(--mid-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center; 
+        margin: 5px 0 15px 0;
+        font-size: 1.5em;
+    }
+
+    label { 
+        display: block; 
+        margin-top: 8px; 
+        font-weight: 600; 
+        color: var(--light-blue); 
+        font-size: 0.75em;
+        text-transform: uppercase;
+    }
+    
+    .id-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--input-bg);
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #30363d;
+        margin-bottom: 10px;
+    }
+
+    .prefix-label { color: var(--light-blue); font-family: monospace; font-size: 0.9em; }
+
+    select, input, textarea {
+        width: 100%;
+        margin: 3px 0;
+        padding: 8px;
+        background: var(--input-bg);
+        color: #fff;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 13px;
+        outline: none;
+    }
+
+    #customName { border: none; background: transparent; flex-grow: 1; margin: 0; padding: 0; }
+
+    .grid-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    /* HORIZONTAL SCROLL FOR FLAGS */
+    .checkbox-group {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 15px;
+        background: var(--input-bg);
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #30363d;
+        margin-bottom: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--mid-blue) var(--input-bg);
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        font-size: 0.75em;
+        cursor: pointer;
+        flex: 0 0 auto; /* Prevents shrinking */
+    }
+
+    .checkbox-item input { margin-right: 6px; accent-color: var(--light-blue); }
+
+    button {
+        padding: 10px;
+        font-size: 0.9em;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    .btn-generate { 
+        width: 100%;
+        background: linear-gradient(135deg, var(--mid-blue), var(--dark-blue));
+        color: white; 
+        margin-bottom: 8px;
+    }
+    
+    .btn-clear { background: #21262d; color: #f85149; width: 48%; border: 1px solid rgba(248,81,73,0.1); }
+    .btn-copy { background: #21262d; color: var(--light-blue); width: 48%; border: 1px solid rgba(0,212,255,0.1); }
+
+    pre {
+        background: #010409;
+        padding: 12px;
+        white-space: pre-wrap;
+        border: 1px solid var(--mid-blue);
+        border-radius: 8px;
+        color: var(--light-blue);
+        font-family: 'Consolas', monospace;
+        height: 150px; 
+        overflow-y: auto;
+        margin-top: 10px;
+        font-size: 0.85em;
+        line-height: 1.3;
+    }
+
+    h3 {
+        color: var(--light-blue);
+        font-size: 0.8em;
+        margin: 15px 0 5px 0;
+        border-left: 2px solid var(--mid-blue);
+        padding-left: 8px;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar { height: 4px; width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--mid-blue); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Lost Leaves Dialogue Maker</h1>
+
+    <label>Narrative Name</label>
+    <div class="id-section">
+        <span class="prefix-label">NARRATIVE_</span>
+        <input type="text" id="customName" placeholder="NAME" value="TUTORIAL">
+    </div>
+
+    <div class="grid-options">
+        <div>
+            <label>Action</label>
+            <select id="npcAction">
+                <option value="">None</option>
+                <option value="NPC_ENTER">NPC_ENTER</option>
+                <option value="NPC_EXIT">NPC_EXIT</option>
+            </select>
+        </div>
+        <div>
+            <label>Target</label>
+            <select id="npcTarget">
+                <option value="crazydave">Dave</option>
+                <option value="winnie">Penny</option>
+                <option value="zombossicon">Zomboss</option>
+            </select>
+        </div>
+    </div>
+
+    <label>Speaker</label>
+    <select id="speaker">
+        <option value="crazydave">Dave</option>
+        <option value="winnie">Penny</option>
+        <option value="zombossicon">Zomboss</option>
+        <option value="none">None</option>
+    </select>
+
+    <label>Emotions & Flags (Scroll →)</label>
+    <div class="checkbox-group">
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="EXCITED"> EXCITED</label>
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="PLAYFUL"> PLAYFUL</label>
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="TIRED"> TIRED</label>
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="SAD"> SAD</label>
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="LONG"> LONG</label>
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="START_DIALOG_MUSIC"> START MUSIC</label>
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="BRINGOUT_TACO"> SHOW TACO</label>
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="EAT_TACO"> EAT TACO</label>
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="SPECIAL1"> SPECIAL 1</label>
+        <label class="checkbox-item"><input type="checkbox" class="flag" value="SPECIAL2"> SPECIAL 2</label>
+    </div>
+
+    <label>Dialogue</label>
+    <textarea id="dialogue" rows="2" placeholder="Text here..."></textarea>
+
+    <button class="btn-generate" onclick="generate()">Add Line</button>
+    
+    <div style="display: flex; justify-content: space-between;">
+        <button class="btn-copy" onclick="copyOutput()">Copy All</button>
+        <button class="btn-clear" onclick="clearAll()">Clear All</button>
+    </div>
+
+    <h3>Final Level Code:</h3>
+    <pre id="output"></pre>
+</div>
+
+<script>
+let fullOutput = "";
+let currentNumber = 1;
+
+function generate() {
+    let name = document.getElementById("customName").value.trim().toUpperCase().replace(/\s+/g, '_') || "CUSTOM";
+    let action = document.getElementById("npcAction").value;
+    let target = document.getElementById("npcTarget").value;
+    let speaker = document.getElementById("speaker").value;
+    let text = document.getElementById("dialogue").value;
+    
+    let id = `NARRATIVE_${name}_INTRO_${currentNumber}`;
+    let selectedFlags = Array.from(document.querySelectorAll('.flag:checked'));
+    let flags = selectedFlags.map(c => `{${c.value}}`).join("");
+    
+    let tags = "";
+    if (action) tags += `{${action}:${target}}`;
+    tags += flags;
+    if (speaker !== "none") {
+        if (speaker === "crazydave") tags += "{SAY}"; 
+        else tags += `{SAY:${speaker}}`;
+    }
+
+    fullOutput += `"${id}",\n"${tags}${text}",\n`;
+    document.getElementById("output").textContent = fullOutput;
+    currentNumber++;
+    document.getElementById("dialogue").value = "";
+    
+    const out = document.getElementById("output");
+    out.scrollTop = out.scrollHeight;
+}
+
+function copyOutput() {
+    const el = document.createElement('textarea');
+    el.value = fullOutput; document.body.appendChild(el);
+    el.select(); document.execCommand('copy');
+    document.body.removeChild(el);
+    alert("Copied!");
+}
+
+function clearAll() {
+    if(confirm("Clear list?")) {
+        fullOutput = ""; currentNumber = 1;
+        document.getElementById("output").textContent = "";
+    }
+}
+</script>
+
+</body>
+</html>
