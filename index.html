@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Lost Leaves Dialogue Maker Pro</title>
+<title>Lost Leaves Dialogue Maker</title>
 <style>
     :root {
         --dark-blue: #001f3f;
@@ -78,6 +78,8 @@
     }
 
     #customName { border: none; background: transparent; flex-grow: 1; margin: 0; padding: 0; }
+    
+    #customNpcInput { border: none; background: transparent; flex-grow: 1; margin: 0; padding: 0; color: #fff;}
 
     .grid-options {
         display: grid;
@@ -85,7 +87,6 @@
         gap: 10px;
     }
 
-    /* HORIZONTAL SCROLL FOR FLAGS */
     .checkbox-group {
         display: flex;
         overflow-x: auto;
@@ -105,7 +106,7 @@
         align-items: center;
         font-size: 0.75em;
         cursor: pointer;
-        flex: 0 0 auto; /* Prevents shrinking */
+        flex: 0 0 auto; 
     }
 
     .checkbox-item input { margin-right: 6px; accent-color: var(--light-blue); }
@@ -118,6 +119,13 @@
         border-radius: 6px;
         cursor: pointer;
         text-transform: uppercase;
+    }
+
+    .btn-add-npc {
+        background: var(--mid-blue);
+        color: white;
+        padding: 6px 12px;
+        font-size: 0.8em;
     }
 
     .btn-generate { 
@@ -152,8 +160,15 @@
         border-left: 2px solid var(--mid-blue);
         padding-left: 8px;
     }
+    
+    .scg-warning {
+        font-size: 0.7em;
+        color: #f85149;
+        font-style: italic;
+        margin-top: -5px;
+        margin-bottom: 10px;
+    }
 
-    /* Scrollbar Styling */
     ::-webkit-scrollbar { height: 4px; width: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--mid-blue); border-radius: 10px; }
 </style>
@@ -184,6 +199,7 @@
                 <option value="crazydave">Dave</option>
                 <option value="winnie">Penny</option>
                 <option value="zombossicon">Zomboss</option>
+                <option value="evilcrazydave">Evil Dave</option>
             </select>
         </div>
     </div>
@@ -193,8 +209,18 @@
         <option value="crazydave">Dave</option>
         <option value="winnie">Penny</option>
         <option value="zombossicon">Zomboss</option>
+        <option value="evilcrazydave">Evil Dave</option>
         <option value="none">None</option>
     </select>
+
+    <label>Add Custom NPC</label>
+    <div class="id-section">
+        <input type="text" id="customNpcInput" placeholder="Enter internal ID">
+        <button class="btn-add-npc" onclick="addCustomNpc()">ADD</button>
+    </div>
+    <div class="scg-warning">
+        *Note: Custom NPCs and Evil Dave will only render in-game if you have their specific SCG and code installed.
+    </div>
 
     <label>Emotions & Flags (Scroll →)</label>
     <div class="checkbox-group">
@@ -222,11 +248,44 @@
 
     <h3>Final Level Code:</h3>
     <pre id="output"></pre>
+    
+    <!-- Added Website Counter -->
+    <div style="text-align: center; margin-top: 15px;">
+        <span style="color: var(--light-blue); font-size: 0.8em; font-weight: bold; margin-right: 10px;">TOTAL VISITS:</span>
+        <img src="https://profile-counter.glitch.me/lost-leaves-dialogue-maker/count.svg" alt="Visitor Count" style="vertical-align: middle;">
+    </div>
 </div>
 
 <script>
 let fullOutput = "";
 let currentNumber = 1;
+
+function addCustomNpc() {
+    let customInput = document.getElementById("customNpcInput");
+    let npcId = customInput.value.trim();
+    
+    if (npcId === "") return;
+
+    let targetDropdown = document.getElementById("npcTarget");
+    let speakerDropdown = document.getElementById("speaker");
+
+    // Create new options
+    let targetOption = new Option(npcId + " (Custom)", npcId);
+    let speakerOption = new Option(npcId + " (Custom)", npcId);
+
+    // Add to dropdowns
+    targetDropdown.add(targetOption);
+    
+    // Insert before the "None" option in Speaker dropdown
+    speakerDropdown.insertBefore(speakerOption, speakerDropdown.options[speakerDropdown.options.length - 1]);
+
+    // Auto-select the newly added character to speed up workflow
+    targetDropdown.value = npcId;
+    speakerDropdown.value = npcId;
+
+    // Clear input
+    customInput.value = "";
+}
 
 function generate() {
     let name = document.getElementById("customName").value.trim().toUpperCase().replace(/\s+/g, '_') || "CUSTOM";
@@ -235,7 +294,9 @@ function generate() {
     let speaker = document.getElementById("speaker").value;
     let text = document.getElementById("dialogue").value;
     
-    let id = `NARRATIVE_${name}_INTRO_${currentNumber}`;
+    let phase = (action === "NPC_EXIT") ? "OUTRO" : "INTRO";
+    let id = `NARRATIVE_${name}_${phase}_${currentNumber}`;
+    
     let selectedFlags = Array.from(document.querySelectorAll('.flag:checked'));
     let flags = selectedFlags.map(c => `{${c.value}}`).join("");
     
