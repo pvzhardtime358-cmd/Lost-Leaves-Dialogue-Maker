@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Added viewport meta tag to fix the tiny, scaled-out mobile view -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Lost Leaves Dialogue Maker</title>
 <style>
     :root {
@@ -13,13 +15,17 @@
         --input-bg: #0d1117;
     }
 
+    * {
+        box-sizing: border-box;
+    }
+
     body {
         background: var(--bg-color);
         color: #e6edf3;
         font-family: 'Segoe UI', Roboto, sans-serif;
         display: flex;
         justify-content: center;
-        padding: 10px;
+        padding: 15px 10px;
         margin: 0;
     }
 
@@ -27,10 +33,10 @@
         width: 100%;
         max-width: 700px;
         background: var(--panel-color);
-        padding: 15px;
+        padding: 20px;
         border-radius: 12px;
         box-shadow: 0 8px 32px rgba(0,0,0,0.8);
-        border: 1px solid rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.15);
     }
 
     h1 { 
@@ -38,17 +44,18 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-align: center; 
-        margin: 5px 0 15px 0;
-        font-size: 1.5em;
+        margin: 0 0 20px 0;
+        font-size: 1.6em;
     }
 
     label { 
         display: block; 
-        margin-top: 8px; 
+        margin-top: 12px; 
         font-weight: 600; 
         color: var(--light-blue); 
-        font-size: 0.75em;
+        font-size: 0.8em;
         text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .id-section {
@@ -56,25 +63,37 @@
         align-items: center;
         gap: 8px;
         background: var(--input-bg);
-        padding: 8px;
-        border-radius: 6px;
+        padding: 10px;
+        border-radius: 8px;
         border: 1px solid #30363d;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
 
-    .prefix-label { color: var(--light-blue); font-family: monospace; font-size: 0.9em; }
+    .prefix-label { color: var(--light-blue); font-family: monospace; font-size: 0.95em; }
 
     select, input, textarea {
         width: 100%;
-        margin: 3px 0;
-        padding: 8px;
+        margin: 5px 0;
+        padding: 12px;
         background: var(--input-bg);
         color: #fff;
         border: 1px solid #30363d;
-        border-radius: 6px;
-        box-sizing: border-box;
-        font-size: 13px;
+        border-radius: 8px;
+        font-size: 14px;
         outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+    
+    select {
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300d4ff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px top 50%;
+        background-size: 10px auto;
+    }
+
+    select:focus, input:focus, textarea:focus {
+        border-color: var(--mid-blue);
     }
 
     #customName { border: none; background: transparent; flex-grow: 1; margin: 0; padding: 0; }
@@ -84,7 +103,7 @@
     .grid-options {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        gap: 15px;
     }
 
     .checkbox-group {
@@ -94,9 +113,9 @@
         gap: 15px;
         background: var(--input-bg);
         padding: 12px;
-        border-radius: 6px;
+        border-radius: 8px;
         border: 1px solid #30363d;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         scrollbar-width: thin;
         scrollbar-color: var(--mid-blue) var(--input-bg);
     }
@@ -104,27 +123,32 @@
     .checkbox-item {
         display: flex;
         align-items: center;
-        font-size: 0.75em;
+        font-size: 0.85em;
         cursor: pointer;
         flex: 0 0 auto; 
     }
 
-    .checkbox-item input { margin-right: 6px; accent-color: var(--light-blue); }
+    .checkbox-item input { margin-right: 8px; accent-color: var(--light-blue); width: 16px; height: 16px; }
 
     button {
-        padding: 10px;
-        font-size: 0.9em;
+        padding: 12px;
+        font-size: 0.95em;
         font-weight: bold;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         cursor: pointer;
         text-transform: uppercase;
+        transition: opacity 0.2s;
+    }
+    
+    button:active {
+        opacity: 0.7;
     }
 
     .btn-add-npc {
         background: var(--mid-blue);
         color: white;
-        padding: 6px 12px;
+        padding: 8px 16px;
         font-size: 0.8em;
     }
 
@@ -132,7 +156,8 @@
         width: 100%;
         background: linear-gradient(135deg, var(--mid-blue), var(--dark-blue));
         color: white; 
-        margin-bottom: 8px;
+        margin-bottom: 12px;
+        margin-top: 5px;
     }
     
     .btn-clear { background: #21262d; color: #f85149; width: 48%; border: 1px solid rgba(248,81,73,0.1); }
@@ -140,36 +165,37 @@
 
     pre {
         background: #010409;
-        padding: 12px;
+        padding: 15px;
         white-space: pre-wrap;
         border: 1px solid var(--mid-blue);
         border-radius: 8px;
         color: var(--light-blue);
         font-family: 'Consolas', monospace;
-        height: 150px; 
+        height: 160px; 
         overflow-y: auto;
         margin-top: 10px;
         font-size: 0.85em;
-        line-height: 1.3;
+        line-height: 1.4;
     }
 
     h3 {
         color: var(--light-blue);
-        font-size: 0.8em;
-        margin: 15px 0 5px 0;
-        border-left: 2px solid var(--mid-blue);
-        padding-left: 8px;
+        font-size: 0.85em;
+        margin: 20px 0 10px 0;
+        border-left: 3px solid var(--mid-blue);
+        padding-left: 10px;
     }
     
     .scg-warning {
-        font-size: 0.7em;
+        font-size: 0.75em;
         color: #f85149;
         font-style: italic;
-        margin-top: -5px;
-        margin-bottom: 10px;
+        margin-top: -10px;
+        margin-bottom: 15px;
+        line-height: 1.3;
     }
 
-    ::-webkit-scrollbar { height: 4px; width: 4px; }
+    ::-webkit-scrollbar { height: 6px; width: 6px; }
     ::-webkit-scrollbar-thumb { background: var(--mid-blue); border-radius: 10px; }
 </style>
 </head>
@@ -237,7 +263,7 @@
     </div>
 
     <label>Dialogue</label>
-    <textarea id="dialogue" rows="2" placeholder="Text here..."></textarea>
+    <textarea id="dialogue" rows="3" placeholder="Text here..."></textarea>
 
     <button class="btn-generate" onclick="generate()">Add Line</button>
     
@@ -249,10 +275,10 @@
     <h3>Final Level Code:</h3>
     <pre id="output"></pre>
     
-    <!-- Added Website Counter -->
-    <div style="text-align: center; margin-top: 15px;">
-        <span style="color: var(--light-blue); font-size: 0.8em; font-weight: bold; margin-right: 10px;">TOTAL VISITS:</span>
-        <img src="https://profile-counter.glitch.me/lost-leaves-dialogue-maker/count.svg" alt="Visitor Count" style="vertical-align: middle;">
+    <!-- Fixed Website Counter -->
+    <div style="text-align: center; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <span style="color: var(--light-blue); font-size: 0.85em; font-weight: bold;">TOTAL VISITS:</span>
+        <img src="https://api.visitorbadge.io/api/visitors?path=lost-leaves-dialogue-maker&countColor=%230072ff&bgColor=%23161b22" alt="Visitor Count">
     </div>
 </div>
 
@@ -269,21 +295,15 @@ function addCustomNpc() {
     let targetDropdown = document.getElementById("npcTarget");
     let speakerDropdown = document.getElementById("speaker");
 
-    // Create new options
     let targetOption = new Option(npcId + " (Custom)", npcId);
     let speakerOption = new Option(npcId + " (Custom)", npcId);
 
-    // Add to dropdowns
     targetDropdown.add(targetOption);
-    
-    // Insert before the "None" option in Speaker dropdown
     speakerDropdown.insertBefore(speakerOption, speakerDropdown.options[speakerDropdown.options.length - 1]);
 
-    // Auto-select the newly added character to speed up workflow
     targetDropdown.value = npcId;
     speakerDropdown.value = npcId;
 
-    // Clear input
     customInput.value = "";
 }
 
@@ -298,7 +318,10 @@ function generate() {
     let id = `NARRATIVE_${name}_${phase}_${currentNumber}`;
     
     let selectedFlags = Array.from(document.querySelectorAll('.flag:checked'));
-    let flags = selectedFlags.map(c => `{${c.value}}`).join("");
+    
+    // Kept your custom texts, but re-added the flag fix from earlier to ensure {EXCITED:winnie} formats properly!
+    let flagNpc = speaker !== "none" ? speaker : target;
+    let flags = selectedFlags.map(c => `{${c.value}:${flagNpc}}`).join("");
     
     let tags = "";
     if (action) tags += `{${action}:${target}}`;
